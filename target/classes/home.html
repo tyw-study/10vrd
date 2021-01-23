@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bootstrap Template</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="bootstrap3/css/bt3.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap3/font-awesome-4.7.0/css/font-awesome.css"/>
+    <style>
+        body {
+            background-color: #2e2e2e;
+        }
+
+        .navbar { /*导航条样式*/
+            background-color: black;
+            border: none;
+            margin-top: 10px;
+        }
+
+        .nav.navbar-nav > li > a:hover {
+            color: #ffc600;
+        }
+
+        .navbar-brand > img {
+            position: relative;
+            bottom: 12px;
+        }
+
+        form > input {
+            background-color: #383838;
+            color: #a9a8a8;
+            padding: 10px 20px;
+            height: 30px;
+            border-radius: 30px;
+            border: none;
+            position: relative;
+            top: 10px;
+            outline: none; /*去掉点击后的边框*/
+        }
+
+        form > button {
+            background-color: rgba(0, 0, 0, 0);
+            border: none;
+            color: gray;
+            position: relative;
+            top: 10px;
+            right: 40px;
+        }
+
+        /*添加瀑布流相关样式*/
+        .grid-item {
+            width: 200px; /*设置每个元素的宽度为200*/
+            margin: 0 10px 10px 0;
+        }
+
+        /*浏览最多样式*/
+        .list-group-item {
+            background-color: black;
+            color: #ffc600;
+            border: none;
+        }
+
+        .list-head {
+            background-color: #ffc600;
+            color: black;
+        }
+
+        #myCarousel {
+            margin-bottom: 10px;
+        }
+        .well{
+            background-color: black;
+            border: none;
+            color: #ffc600;
+            font-weight: bold;
+            text-align: center;
+        }
+        /*给蓝色信息条添加样式*/
+        .floatView{
+            width: 100%;
+            height: 40px;
+            background-color: #0aa1ed;
+            text-align: center;
+            color: #ffc600;
+            /*显示到最下面*/
+            position: absolute;
+            bottom: 0;
+            display: none;/*让元素隐藏*/
+        }
+        .floatView>p{
+            margin: 0;/*去掉自带外边距*/
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+<header class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img alt="Brand" src="images/logo.png">
+                </a>
+            </div>
+            <!--分类列表-->
+            <ul class="nav navbar-nav">
+                <li><a href="home">首页</a></li>
+                <!--遍历容器中的list集合 c代表每一个分类对象-->
+                <li th:each="c:${list}">
+                    <!--替换掉显示的文本为分类名称-->
+                    <a th:text="${c.name}" th:href="'home?cid='+${c.id}">手绘</a></li>
+                <li>
+                    <form action="home">
+                        <input type="text" name="keyword" placeholder="Search">
+                        <button type="submit">
+                            <span class="fa fa-search"></span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+            <!--右侧列表-->
+            <ul class="nav navbar-nav navbar-right">
+                <li th:if="${user}!=null"><a href="showsend">发布作品</a></li>
+                <li th:if="${user}!=null"><a href="showbanner">轮播图</a></li>
+                <li th:if="${user}!=null"><a href="logout">登出</a></li>
+                <!--th:if作用是 满足条件时元素显示否则不显示-->
+                <li th:if="${user}==null"><a href="showlogin">管理员入口</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<section class="container">
+    <!--轮播图开始-->
+    <div id="myCarousel" class="carousel slide">
+        <!-- 轮播（Carousel）指标 -->
+        <ol class="carousel-indicators">
+            <!--th:each会自动创建一个 名字为:变量名+Stat 的一个变量,
+            此变量保存着遍历时的信息,变量.index类似于for循环中的i
+            代表遍历时的下标   bStat.index
+            th:attr 是给元素添加xxx属性 -->
+            <li th:each="b:${bList}" data-target="#myCarousel"
+                th:attr="data-slide-to=${bStat.index}"></li>
+        </ol>
+        <!-- 轮播（Carousel）项目 -->
+        <div class="carousel-inner">
+            <div th:each="b:${bList}" class="item">
+                <img th:src="${b.url}" alt="First slide">
+                <div class="carousel-caption"></div>
+            </div>
+
+        </div>
+        <!-- 轮播（Carousel）导航 -->
+        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+    <!--轮播图结束-->
+    <!--创建一行3:1-->
+    <div class="row">
+        <div class="col-md-9">
+            <!--瀑布流开始-->
+            <div class="grid">
+                <div th:each="p:${pList}" class="grid-item">
+                    <a th:href="'detail?id='+${p.id}">
+                        <img class="img-responsive" th:src="${p.url}" alt="">
+                    </a>
+                    <!--蓝色信息条开始-->
+                    <div class="floatView">
+                        <!--显示作品的标题-->
+                        <p th:text="${p.title}"></p>
+                        <!--显示作品浏览量和点赞量-->
+                        <span th:text="${p.viewCount}" class="fa fa-eye"></span>
+                        <span th:text="${p.likeCount}" class="fa fa-thumbs-o-up"></span>
+                    </div>
+                    <!--蓝色信息条结束 -->
+                </div>
+            </div>
+            <!--瀑布流结束 center-block居中-->
+            <button id="loadmore" class="btn btn-success center-block">加载更多</button>
+        </div>
+        <div class="col-md-3">
+            <!--浏览最多开始-->
+            <ul class="list-group">
+                <li class="list-group-item list-head">
+                    <h4>
+                        <span class="fa fa-eye"> 浏览最多</span>
+                    </h4>
+                </li>
+                <li th:each="p:${vList}" class="list-group-item">
+                    <!-- 左对齐 -->
+                    <div class="media">
+                        <div class="media-left">
+                            <a th:href="'detail?id='+${p.id}">
+                                <img th:src="${p.url}" class="media-object"
+                                     style="width:60px;height: 50px">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <a th:href="'detail?id='+${p.id}"><h4 th:text="${p.title}" class="media-heading">左对齐</h4></a>
+                            <p th:text="${p.intro}"></p>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+            <!--浏览最多结束-->
+            <!--最受欢迎开始-->
+            <ul class="list-group">
+                <li class="list-group-item list-head">
+                    <h4>
+                        <span class="fa fa-thumbs-o-up"> 最受欢迎</span>
+                    </h4>
+                </li>
+                <li th:each="p:${lList}" class="list-group-item">
+                    <!-- 左对齐 -->
+                    <div class="media">
+                        <div class="media-left">
+                            <a th:href="'detail?id='+${p.id}">
+                                <img th:src="${p.url}" class="media-object"
+                                     style="width:60px;height: 50px">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <a th:href="'detail?id='+${p.id}"><h4 th:text="${p.title}" class="media-heading">左对齐</h4></a>
+                            <p th:text="${p.intro}">这是一些示例文本...</p>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+            <!--最受欢迎结束-->
+        </div>
+
+    </div>
+</section>
+<footer class="container">
+    <div class="well">
+        Copyright © 2020 vrd.net.cn 京ICP备16053980号-5
+        <!--pull-right效果类似float:right;-->
+        <span class="pull-right">Version 0.1.0</span>
+    </div>
+</footer>
+</body>
+<script type="text/javascript" src="bootstrap3/jquery.min.js"></script>
+<script type="text/javascript" src="bootstrap3/js/bootstrap.js"></script>
+<script type="text/javascript" src="bootstrap3/js/holder.js"></script>
+<script type="text/javascript" src="bootstrap3/js/html5shiv.min.js"></script>
+<script type="text/javascript" src="bootstrap3/js/css3-mediaqueries.js"></script>
+<script type="text/javascript" src="bootstrap3/js/respond.min.js"></script>
+<!--引入和瀑布流相关的文件-->
+<script src="js/masonry.pkgd.min.js"></script>
+<script src="js/imagesloaded.pkgd.js"></script>
+<script>
+    //让轮播图开始移动
+    $("#myCarousel").carousel("cycle");
+    //瀑布流初始化代码
+    $(".grid").masonry({
+        itemSelector: ".grid-item", //告诉框架 选择器是什么
+        columnWidth: 210 //告诉框架 每个元素所占宽度(元素宽度+间距)
+    })
+    //图片加载完之后让瀑布流处理一下显示布局
+    $(".grid").imagesLoaded().progress(function () {
+        //此处代码图片加载完之后会执行
+        $(".grid").masonry("layout");//让瀑布流重新计算显示效果  解决图片层叠问题
+    });
+
+    //让第一个轮播图显示
+    $(".item").eq(0).attr("class","item active");
+    //给瀑布流中的元素添加鼠标移入移出事件
+    $(".grid-item").hover(function () {//鼠标移入
+        //通过瀑布流元素获取里面的蓝色信息条div
+        $(this).children("div").stop().fadeIn(500);
+    },function () {//鼠标移出
+        $(this).children("div").stop().fadeOut(500);
+    });
+
+    //让轮播图的第一个圆点变实心
+    $("ol>li").eq(0).attr("class","active");
+
+    //给加载更多按钮添加点击事件
+    $("#loadmore").click(function () {
+        //发出异步请求
+        $.ajax({
+            type:"get",
+            url:"loadmore",
+            data:"count="+$(".grid-item").length,//count=已有作品数量
+            success:function (msg) {
+                //把接收到的json字符串转成json对象
+                let json = JSON.parse(msg);
+                //遍历json数组
+                for (let i = 0; i < json.length; i++) {
+                    //取出遍历的每一个作品对象
+                    let product = json[i];
+                    //创建瀑布流元素组合
+                    let item = $('<div class="grid-item"><a><img class="img-responsive" alt=""></a><div class="floatView"><p></p><span class="fa fa-eye"></span><span class="fa fa-thumbs-o-up"></span></div></div>');
+                    //给元素组合里面的元素赋值 find方法是查找元素内部的子元素
+                    item.find("img").attr("src",product.url);
+                    item.find("p").text(product.title);
+                    item.find("span").eq(0).text(product.viewCount);
+                    item.find("span").eq(1).text(product.likeCount);
+                    item.find("a").attr("href","detail?id="+product.id);
+                    //把瀑布流元素添加到瀑布流中
+                    $(".grid").append(item);
+                    //通知瀑布流框架 添加了新元素做布局操作
+                    $(".grid").masonry("appended",item);
+                    //为了避免出现层叠问题添加以下代码 在图片加载完之后重新计算布局
+                    $(".grid").imagesLoaded().progress(function () {
+                        //刷新布局
+                        $(".grid").masonry("layout");
+                    });
+                    //给元素添加鼠标移入移出事件
+                    item.hover(function () {
+                        //得到元素里面的蓝条div 让其显示
+                        $(this).children("div").stop().fadeIn(500);
+                    },function () {
+                        $(this).children("div").stop().fadeOut(500);
+                    });
+                }
+
+            }
+        })
+    })
+</script>
+</html>
+
+
+

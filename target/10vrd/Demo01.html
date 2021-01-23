@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="button" value="发出异步请求">
+<h1>0</h1>
+<h2></h2>
+<!--引入jquery-->
+<script src="bootstrap3/jquery.min.js"></script>
+<script>
+    let count = 0;
+    setInterval(function () {
+        $("h1").text(count++);
+    }, 200);
+
+    //给按钮添加点击事件
+    $("input").click(function () {
+        /*发出异步请求
+        * type:请求方式 get/post
+        * url:请求路径
+        * data:请求参数
+        * success是发出请求后 服务器响应执行的方法 msg是服务器返回的数据*/
+        $.ajax({
+            type: "get",
+            url: "hello",
+            data: "info=abc",
+            success: function (msg) {
+                $("h2").text(msg);
+            }
+
+        });
+
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>商品数量:<span>0</span></h3>
+<input type="button" value="添加">
+<script src="../bootstrap3/jquery.min.js"></script>
+<script>
+    $("input").click(function () {
+        let count = parseInt($("span").text());
+        count++;
+        $("span").text(count);
+    })
+</script>
+
+</body>
+</html>

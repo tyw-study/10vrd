@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="mydiv">
+
+    <div v-for="(p,i) in persons">
+        <p v-text="p.id"></p>
+        <p v-text="p.name"></p>
+        <p v-text="p.job"></p>
+    </div>
+</div>
+<script src="../bootstrap3/jquery.min.js"></script>
+<script src="../js/vue.js"></script>
+<script>
+    let v = new Vue({
+        el: "#mydiv",
+        data: {
+            //准备json数组
+            persons: [{id: 1, name: "张三", job: "程序员"}, {id: 2, name: "李四", job: "销售"},
+                {id: 2, name: "李四", job: "人事"}]
+        }
+    })
+</script>
+</body>
+</html>

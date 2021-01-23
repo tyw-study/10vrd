@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="mydiv">
+    <!--给元素绑定XXX事件 写两种方法 作用相同-->
+    <input type="button" value="按钮1" v-on:click="myfn">
+    <input type="button" value="按钮2" @click="myfn">
+</div>
+<script src="../bootstrap3/jquery.min.js"></script>
+<script src="../js/vue.js"></script>
+<script>
+    let v = new Vue({
+        el: "#mydiv",
+        data: {},
+        methods: {//和vue相关的方法全部写到这里面
+            myfn: function () {
+                alert("“方法触发了")
+
+            }
+        }
+    })
+</script>
+
+</body>
+</html>

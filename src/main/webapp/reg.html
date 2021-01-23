@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>注册页面</h3>
+<form action="reg">
+    用户名：<input type="text" name="username"><span></span><br>
+    密码：<input type="text" name="password"><br>
+    <input type="submit" value="注册">
+</form>
+<script src="bootstrap3/jquery.min.js"></script>
+<script>
+    $("input:first").blur(function () {
+        //发出异步请求
+        $.ajax({
+            type: "get",
+            url: 'check',
+            data: "username=" + $("input:first").val(),
+            success: function (msg) {//msg服务器返回的数据
+                $("span").text(msg);//把服务器返回的数据信息显示到span中
+            }
+        })
+
+    })
+</script>
+</body>
+</html>

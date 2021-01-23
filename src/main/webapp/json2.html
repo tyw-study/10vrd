@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="button" value="按钮1">
+<script src="bootstrap3/jquery.min.js"></script>
+<script>
+    //给按钮添加点击事件
+    $("input:eq(0)").click(function () {
+        //发出异步请求
+        $.ajax({
+            type: "get",
+            url: "json1",
+            data: "",
+            success: function (msg) {
+                alert(msg);
+            }
+        })
+    });
+</script>
+
+</body>
+</html>
